@@ -1,0 +1,14 @@
+{
+  "name": "jaronson-stack_wordpress",
+  "version": "0.1.0",
+  "author": "jaronson",
+  "summary": "Multi-tier Wordpress Deployment Stack",
+  "license": "Apache 2.0",
+  "source": "https://github.com/jaronson/stack_wordpress",
+  "project_page": "https://github.com/jaronson/stack_wordpress",
+  "issues_url": "https://github.com/jaronson/stack_wordpress/issues",
+  "dependencies": [
+    {"name":"puppetlabs-stdlib","version_requirement":">= 1.0.0"}
+  ]
+}
+
