@@ -9,8 +9,18 @@ class stack_wordpress::app {
   }
 
   class { 'apache':
-    docroot => $install_dir
+    docroot => $::app_root
+  }
+  include apache::mod::php
+
+  class { 'mysql::bindings':
+    php_enable => true
   }
 
-  include apache::mod::php
+  class { 'wordpress':
+    install_dir => $::app_root,
+    db_host     => $::db_host, # Provided by stack_wordpress_db_host facter
+    db_user     => $::db_user,
+    db_password => $::db_pass,
+  }
 }
