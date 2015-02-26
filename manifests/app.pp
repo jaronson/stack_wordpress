@@ -1,8 +1,8 @@
-class stack_wordpress::app(
-  $app_root => '/opt/wp',
-  $db_user  => 'wordpress',
-  $db_pass  => 'strongpass',
-){
+class stack_wordpress::app (
+  $app_root = '/opt/wp',
+  $db_user  = 'wordpress',
+  $db_pass  = 'strongpass',
+) {
   include stack_wordpress::base
 
   class { 'apache':
