@@ -49,12 +49,16 @@ module Stack
       config.node.split('-').first
     end
 
+    def find_nodes(pattern)
+      api.client.request('nodes', [ :~, 'name', pattern ]).data
+    end
+
     def find_facts(node_name)
       api.client.request('facts', [
         :and,
         [ :'=', 'certname', node_name ],
         [ :'=', 'name', 'ec2_public_ipv4'],
-      ])
+      ]).data
     end
 
     def add_facts
