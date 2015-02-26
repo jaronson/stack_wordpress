@@ -49,44 +49,45 @@ module Stack
       config.node.split('-').first
     end
 
-    def fact_names
-      [
-        :ec2_public_ipv4,
-        :ec2_public_hostname,
-      ]
-    end
-
-    def find_nodes
-      api.client.request('nodes', [ :~, 'name', "^#{stack_name}.*" ]).data
-    end
-
     def find_facts(node_name)
-      api.client.request("facts", [ :'=', "certname", node_name ]).data
+      api.client.request('facts', [
+        :and,
+        [ :'=', 'certname', node_name ],
+        [ :'=', 'name', 'ec2_public_ipv4'],
+      ])
     end
 
-    def add_facts
-      nodes = find_nodes
-
-      Log.logger.info(nodes)
+    def add_app_facts
+      app_facts = []
+      nodes     = find_nodes("^#{stack_name}-app.*")
 
       nodes.each do |node|
-        type = node['name'].split('-').last
 
-        facts = find_facts(node['name'])
+        fact_name = "#{node['name'].split('-').last}-ip"
+        facts     = find_facts(node['name'])
 
         facts.each do |fact|
-          next unless fact_names.include?(fact['name'].to_sym)
+          value = fact['value']
 
-          fact_name = "#{type}_#{fact['name']}".to_sym
-          value     = fact['value']
+          Log.logger.info("Adding fact: #{fact_name} = #{value}")
+          app_facts << "#{fact_name}=#{value}"
+        end
+      end
 
-          Log.logger.info("Setting fact: #{fact_name} = #{value}")
+      Facter.add(:"#{stack_name}-apps") do
+        setcode do
+          app_facts.join(',')
+        end
+      end
+    end
 
-          Facter.add(fact_name) do
-            setcode do
-              value
-            end
-          end
+    def add_db_facts
+      node = find_nodes("^#{stack_name}-db").first
+      fact = find_facts(node['name']).first
+
+      Facter.add(:stack_db_ip) do
+        setcode do
+          fact['value']
         end
       end
     end

@@ -21,7 +21,7 @@ class stack_wordpress::app(
     install_dir => $app_root,
 
     # Provided by stack_wordpress_db_host facter
-    db_host     => $::stack_db_ec2_public_ipv4,
+    db_host     => $::stack_db_ip,
 
     db_user     => $db_user,
 
