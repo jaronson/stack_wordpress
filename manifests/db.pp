@@ -5,8 +5,9 @@ class stack_wordpress::db {
     root_password => 'strongpass',
   }
 
-  exec { "create mysql users":
-    command => template('mysql_users.erb'),
-    path    => '/usr/bin:/bin:/usr/sbin',
+  file { '/tmp/mysql_users.sql':
+    ensure  => 'present',
+    content => template('stack_wordpress/mysql_users.sql'),
+    require => Class['mysql::server']
   }
 }

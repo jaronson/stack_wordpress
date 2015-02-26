@@ -72,7 +72,7 @@ module Stack
 
       nodes.each do |node|
 
-        fact_name = "#{node['name'].split('-').last}-ip"
+        fact_name = "#{node['name']}-ip"
         facts     = find_facts(node['name'])
 
         facts.each do |fact|
