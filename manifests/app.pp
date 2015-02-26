@@ -5,6 +5,10 @@ class stack_wordpress::app (
 ) {
   include stack_wordpress::base
 
+  package { gcc:
+    ensure => 'present'
+  }
+
   class { 'apache':
     docroot => $app_root
   }
