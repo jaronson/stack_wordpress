@@ -1,2 +1,0 @@
-class stack_wordpress {
-}
