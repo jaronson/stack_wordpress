@@ -57,6 +57,11 @@ module Stack
       ])
     end
 
+    def add_facts
+      add_app_facts
+      add_db_facts
+    end
+
     def add_app_facts
       app_facts = []
       nodes     = find_nodes("^#{stack_name}-app.*")
@@ -74,7 +79,7 @@ module Stack
         end
       end
 
-      Facter.add(:"#{stack_name}-apps") do
+      Facter.add(:stack_apps) do
         setcode do
           app_facts.join(',')
         end
