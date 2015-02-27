@@ -4,12 +4,23 @@ class stack_wordpress::db (
   include stack_wordpress::base
 
   class { 'mysql::server':
+    restart => true,
     root_password => $root_password,
     override_options => {
       'mysqld' => {
         'bind-address' => '0.0.0.0'
       }
     }
+  }
+
+  resources { 'firewall':
+    purge => true
+  }
+
+  firewall { '100 allow mysql access':
+    port => [3306],
+    proto => tcp,
+    action => accept
   }
 
   file { '/tmp/mysql_users.sql':
