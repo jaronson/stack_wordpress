@@ -1,3 +1,5 @@
+require 'json'
+
 module Stack
   class Config
     attr_reader :node, :port, :server,
@@ -61,31 +63,34 @@ module Stack
       ]).data
     end
 
+    def find_catalog(node_name)
+      PuppetDB::Client.get("/catalogs/#{node_name}").parsed_response
+    end
+
     def add_facts
       add_app_facts
       add_db_facts
     end
 
     def add_app_facts
-      app_facts = []
-      nodes     = find_nodes("^#{stack_name}-app.*")
+      apps  = []
+      nodes = find_nodes("^#{stack_name}-app.*")
 
       nodes.each do |node|
+        node_name = node['name']
+        node_ip   = find_facts(node_name).first['value']
+        catalog   = find_catalog(node_name)
 
-        fact_name = "#{node['name']}-ip"
-        facts     = find_facts(node['name'])
-
-        facts.each do |fact|
-          value = fact['value']
-
-          Log.logger.info("Adding fact: #{fact_name} = #{value}")
-          app_facts << "#{fact_name}=#{value}"
-        end
+        apps << {
+          'name' => node_name,
+          'public_ip' => node_ip,
+          'catalog' => catalog
+        }
       end
 
       Facter.add(:stack_apps) do
         setcode do
-          app_facts.join(',')
+          JSON.dump(apps)
         end
       end
     end
