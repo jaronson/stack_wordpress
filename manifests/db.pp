@@ -5,6 +5,11 @@ class stack_wordpress::db (
 
   class { 'mysql::server':
     root_password => $root_password,
+    override_options => {
+      'mysqld' => {
+        'bind-address' => '0.0.0.0'
+      }
+    }
   }
 
   file { '/tmp/mysql_users.sql':
