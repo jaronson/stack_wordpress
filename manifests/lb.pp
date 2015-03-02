@@ -3,9 +3,19 @@ class stack_wordpress::lb {
 
   class { 'haproxy': }
 
-  haproxy::listen { 'stack00':
+  haproxy::frontend { 'localnodes':
+    ipaddress => '0.0.0.0',
+    ports => '80',
+    mode => 'http',
+    options => {
+      'default_backend' => 'stack00'
+    },
+  }
+
+  haproxy::backend { 'stack00':
     collect_exported => true,
-    ipaddress        => '0.0.0.0',
-    ports            => '80',
+    options => {
+      'mode' => 'http'
+    }
   }
 }
