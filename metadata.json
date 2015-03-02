@@ -35,6 +35,10 @@
     {
       "name": "hunner-wordpress",
       "version_requirement": "1.0.0"
+    },
+    {
+      "name": "puppetlabs-haproxy",
+      "version_requirement": "1.1.0"
     }
   ]
 }
