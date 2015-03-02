@@ -88,6 +88,8 @@ module Stack
         }
       end
 
+      Log.logger.info("Apps: #{apps.inspect}")
+
       Facter.add(:stack_apps) do
         setcode do
           JSON.dump(apps)
