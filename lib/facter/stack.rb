@@ -1,3 +1,5 @@
+require 'json'
+
 module Stack
   class Config
     attr_reader :node, :port, :server,
@@ -49,44 +51,59 @@ module Stack
       config.node.split('-').first
     end
 
-    def fact_names
-      [
-        :ec2_public_ipv4,
-        :ec2_public_hostname,
-      ]
-    end
-
-    def find_nodes
-      api.client.request('nodes', [ :~, 'name', "^#{stack_name}.*" ]).data
+    def find_nodes(pattern)
+      api.client.request('nodes', [ :~, 'name', pattern ]).data
     end
 
     def find_facts(node_name)
-      api.client.request("facts", [ :'=', "certname", node_name ]).data
+      api.client.request('facts', [
+        :and,
+        [ :'=', 'certname', node_name ],
+        [ :'=', 'name', 'ec2_public_ipv4'],
+      ]).data
+    end
+
+    def find_catalog(node_name)
+      PuppetDB::Client.get("/catalogs/#{node_name}").parsed_response
     end
 
     def add_facts
-      nodes = find_nodes
+      add_app_facts
+      add_db_facts
+    end
 
-      Log.logger.info(nodes)
+    def add_app_facts
+      apps  = []
+      nodes = find_nodes("^#{stack_name}-app.*")
 
       nodes.each do |node|
-        type = node['name'].split('-').last
+        node_name = node['name']
+        node_ip   = find_facts(node_name).first['value']
+        catalog   = find_catalog(node_name)
 
-        facts = find_facts(node['name'])
+        apps << {
+          'name' => node_name,
+          'public_ip' => node_ip,
+          'catalog' => catalog
+        }
+      end
 
-        facts.each do |fact|
-          next unless fact_names.include?(fact['name'].to_sym)
+      Log.logger.info("Apps: #{apps.inspect}")
 
-          fact_name = "#{type}_#{fact['name']}".to_sym
-          value     = fact['value']
+      Facter.add(:stack_apps) do
+        setcode do
+          JSON.dump(apps)
+        end
+      end
+    end
 
-          Log.logger.info("Setting fact: #{fact_name} = #{value}")
+    def add_db_facts
+      node = find_nodes("^#{stack_name}-db").first
+      fact = find_facts(node['name']).first
 
-          Facter.add(fact_name) do
-            setcode do
-              value
-            end
-          end
+      Facter.add(:stack_db_ip) do
+        setcode do
+          fact['value']
         end
       end
     end

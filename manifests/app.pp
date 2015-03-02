@@ -1,8 +1,11 @@
-class stack_wordpress::app {
+class stack_wordpress::app (
+  $app_root = '/opt/wp',
+  $db_pass  = 'strongpass',
+) {
   include stack_wordpress::base
 
   class { 'apache':
-    docroot => $::app_root
+    docroot => $app_root
   }
 
   class { 'apache::mod::php': }
@@ -14,13 +17,13 @@ class stack_wordpress::app {
   }
 
   class { 'wordpress':
-    install_dir => $::app_root,
+    install_dir => $app_root,
 
     # Provided by stack_wordpress_db_host facter
-    db_host     => $::puppetclient_ec2_public_ipv4,
+    db_host     => $::stack_db_ip,
 
-    db_user     => $::db_user,
+    db_user     => 'wordpress',
 
-    db_password => $::db_pass,
+    db_password => $db_pass,
   }
 }

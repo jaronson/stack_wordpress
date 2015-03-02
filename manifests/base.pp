@@ -1,4 +1,8 @@
 class stack_wordpress::base {
+  package { gcc:
+    ensure => 'present'
+  }
+
   cron { 'puppetagent':
     user    => 'root',
     ensure  => 'absent',
