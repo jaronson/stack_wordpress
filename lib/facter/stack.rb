@@ -97,6 +97,7 @@ module Stack
         apps << {
           'name' => node_name,
           'public_ip' => node_ip,
+          'catalog' => catalog,
         }
       end
 
