@@ -72,6 +72,14 @@ module Stack
       add_db_facts
     end
 
+    def add_my_ip(address)
+      Facter.add(:public_ip_address) do
+        setcode do
+          address
+        end
+      end
+    end
+
     def add_app_facts
       apps  = []
       nodes = find_nodes("^#{stack_name}-app.*")
@@ -79,12 +87,16 @@ module Stack
       nodes.each do |node|
         node_name = node['name']
         node_ip   = find_facts(node_name).first['value']
+
+        if node_name == config.node
+          add_my_ip(node_ip)
+        end
+
         catalog   = find_catalog(node_name)
 
         apps << {
           'name' => node_name,
           'public_ip' => node_ip,
-          'catalog' => catalog
         }
       end
 

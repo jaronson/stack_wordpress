@@ -26,4 +26,12 @@ class stack_wordpress::app (
 
     db_password => $db_pass,
   }
+
+  @@haproxy::balancermember { $::fqdn:
+    listening_service => 'stack00',
+    server_names      => $::hostname,
+    ipaddresses       => $::public_ip_address,
+    ports             => '80',
+    options           => 'check',
+  }
 }
