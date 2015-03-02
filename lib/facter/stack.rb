@@ -82,7 +82,7 @@ module Stack
 
     def add_app_facts
       apps  = []
-      nodes = find_nodes("^#{stack_name}-app.*")
+      nodes = find_nodes("^#{stack_name}-web.*")
 
       nodes.each do |node|
         node_name = node['name']

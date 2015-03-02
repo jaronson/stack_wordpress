@@ -1,7 +1,4 @@
 class stack_wordpress::base {
-  package { gcc:
-    ensure => 'present'
-  }
 
   cron { 'puppetagent':
     user    => 'root',
@@ -9,8 +6,12 @@ class stack_wordpress::base {
     command => '/usr/local/bin/puppet agent --onetime --no-daemonize --splay --splaylimit 60';
   }
 
-  package { 'puppetdb-ruby':
-    ensure   => 'installed',
-    provider => 'gem',
+  package { gcc:
+    ensure => 'present'
+  }
+  ->
+  exec { 'install puppetdb-ruby':
+    command => 'gem install puppetdb-ruby',
+    path => '/opt/puppet/bin'
   }
 }

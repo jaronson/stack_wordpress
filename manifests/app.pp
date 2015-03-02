@@ -21,10 +21,10 @@ class stack_wordpress::app (
 
     # Provided by stack_wordpress_db_host facter
     db_host     => $::stack_db_ip,
-
     db_user     => 'wordpress',
-
     db_password => $db_pass,
+    create_db   => false,
+    create_db_user => false,
   }
 
   @@haproxy::balancermember { $::fqdn:
