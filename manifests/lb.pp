@@ -8,11 +8,11 @@ class stack_wordpress::lb {
     ports => '80',
     mode => 'http',
     options => {
-      'default_backend' => 'stack00'
+      'default_backend' => $::stack_name,
     },
   }
 
-  haproxy::backend { 'stack00':
+  haproxy::backend { $::stack_name,
     collect_exported => true,
     options => {
       'mode' => 'http'

@@ -68,8 +68,18 @@ module Stack
     end
 
     def add_facts
+      set_stack_name
       add_app_facts
       add_db_facts
+    end
+
+    def set_stack_name
+      name = stack_name
+      Facter.add(:stack_name) do
+        setcode do
+          name
+        end
+      end
     end
 
     def add_my_ip(address)
@@ -92,7 +102,9 @@ module Stack
           add_my_ip(node_ip)
         end
 
-        catalog   = find_catalog(node_name)
+        Log.logger.info("Found app: #{node_name}, #{node_ip}")
+
+        catalog = find_catalog(node_name)
 
         apps << {
           'name' => node_name,
@@ -100,8 +112,6 @@ module Stack
           'catalog' => catalog,
         }
       end
-
-      Log.logger.info("Apps: #{apps.inspect}")
 
       Facter.add(:stack_apps) do
         setcode do

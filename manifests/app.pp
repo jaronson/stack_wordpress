@@ -28,7 +28,7 @@ class stack_wordpress::app (
   }
 
   @@haproxy::balancermember { $::fqdn:
-    listening_service => 'stack00',
+    listening_service => $::stack_name,
     server_names      => $::hostname,
     ipaddresses       => $::public_ip_address,
     ports             => '80',

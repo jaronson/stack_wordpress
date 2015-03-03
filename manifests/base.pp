@@ -1,5 +1,4 @@
 class stack_wordpress::base {
-
   cron { 'puppetagent':
     user    => 'root',
     ensure  => 'present',
@@ -12,6 +11,6 @@ class stack_wordpress::base {
   ->
   exec { 'install puppetdb-ruby':
     command => 'gem install puppetdb-ruby',
-    path => '/opt/puppet/bin'
+    path => '/opt/puppet/bin:/usr/local/bin:/usr/bin:/bin'
   }
 }
