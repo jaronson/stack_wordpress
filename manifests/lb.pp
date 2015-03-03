@@ -12,7 +12,7 @@ class stack_wordpress::lb {
     },
   }
 
-  haproxy::backend { $::stack_name,
+  haproxy::backend { $::stack_name:
     collect_exported => true,
     options => {
       'mode' => 'http'
