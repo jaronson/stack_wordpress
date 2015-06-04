@@ -1,6 +1,6 @@
 {
   "name": "jaronson-stack_wordpress",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": "jaronson",
   "summary": "Multi-tier Wordpress Deployment Stack",
   "license": "Apache 2.0",
