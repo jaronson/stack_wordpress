@@ -1,6 +1,25 @@
+require 'logger'
+require 'puppet'
+require 'facter'
+require 'json'
+require 'socket'
 require 'json'
 
 module Stack
+  class Log
+    @logger = nil
+
+    def self.logger
+      return @logger if @logger
+
+      @logger = Logger.new(logpath)
+    end
+
+    def self.logpath
+      '/tmp/stack.log'
+    end
+  end
+
   class Config
     attr_reader :node, :port, :server,
       :ca_path, :cert_path, :key_path
@@ -121,4 +140,11 @@ module Stack
       end
     end
   end
+end
+
+begin
+  require 'puppetdb'
+  Stack::FactProvider.new.add_facts
+rescue LoadError => e
+  Stack::Log.logger.warn('Missing puppetdb-ruby gem. This should be present on the next agent run')
 end
