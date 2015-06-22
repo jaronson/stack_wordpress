@@ -5,7 +5,8 @@ class stack_wordpress::app (
   include stack_wordpress::base
 
   class { 'apache':
-    docroot => $app_root
+    docroot => $app_root,
+    mpm_module => 'prefork'
   }
 
   class { 'apache::mod::php': }
