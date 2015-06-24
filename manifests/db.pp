@@ -1,5 +1,6 @@
-class stack_wordpress::db (
-  $root_password = 'strongpass'
+lass stack_wordpress::db (
+  $root_password = 'strongpass',
+  $db_user = 'wordpress',
 ) {
   include stack_wordpress::base
 
@@ -25,7 +26,7 @@ class stack_wordpress::db (
 
   file { '/tmp/mysql_users.sql':
     ensure  => 'present',
-    content => template('stack_wordpress/mysql_users.sql'),
+    content => template('stack_wordpress/mysql_users.sql.erb'),
     require => Class['mysql::server']
   }
 
@@ -33,6 +34,20 @@ class stack_wordpress::db (
     ensure  => 'present',
     charset => 'utf8',
   }
+
+  mysql_user { 'wordpress@%':
+    ensure                   => 'present',
+    password_hash            => mysql_password ('strongpass'),
+  }
+
+  mysql_grant { 'wordpress@%/wordpress.*':
+    ensure     => 'present',
+    user       => 'wordpress@%',
+    table      => 'wordpress.*',
+    privileges => ['ALL'],
+    }
+
+
 
   exec { 'create mysql users':
     command => "mysql -uroot -p${root_password} < /tmp/mysql_users.sql",

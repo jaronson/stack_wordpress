@@ -101,15 +101,12 @@ module Stack
 
     def add_app_facts
       apps  = []
-      nodes = find_nodes("^#{stack_name}-app.*")
+      nodes = find_nodes("^#{stack_name}-web*")
 
       nodes.each do |node|
         node_name = node['name']
         node_ip   = find_facts(node_name).first['value']
-
-        if node_name == config.node
-          add_my_ip(node_ip)
-        end
+        add_my_ip(node_ip)
 
         catalog   = find_catalog(node_name)
 
