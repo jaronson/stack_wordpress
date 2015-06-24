@@ -1,4 +1,4 @@
-lass stack_wordpress::db (
+class stack_wordpress::db (
   $root_password = 'strongpass',
   $db_user = 'wordpress',
 ) {
@@ -55,3 +55,4 @@ lass stack_wordpress::db (
     require => File['/tmp/mysql_users.sql'],
   }
 }
+
