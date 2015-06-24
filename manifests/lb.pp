@@ -4,12 +4,12 @@ class stack_wordpress::lb {
   class { 'haproxy': }
 
   haproxy::listen { 'stats':
-    ports     => '80',
+    ports     => '1936',
     options   => {
       'mode'  => 'http',
       'stats' => [
       'enable','hide-version','realm Haproxy\ Statistics',
-      'uri /stats','auth admin:Password12'
+      'uri /','auth admin:Password12'
 
     ],
   },
