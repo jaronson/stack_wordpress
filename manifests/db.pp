@@ -47,12 +47,9 @@ class stack_wordpress::db (
     privileges => ['ALL'],
     }
 
-
-
   exec { 'create mysql users':
     command => "mysql -uroot -p${root_password} < /tmp/mysql_users.sql",
     path    => '/usr/bin',
     require => File['/tmp/mysql_users.sql'],
   }
 }
-

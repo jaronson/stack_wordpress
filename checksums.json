@@ -1,0 +1,16 @@
+{
+  "Gemfile": "dbc1a15e3a264c03878028240cfc5d89",
+  "Gemfile.lock": "8b3875f72242dcf1ac78285216851b4b",
+  "README.md": "a29a2d1f71263835145fd2e9efcac8ba",
+  "Rakefile": "20b80e526e351a74df2001f504e756d2",
+  "lib/facter/stack.rb": "ab0bd59ffbf44fe7aa895d60d5a8cee2",
+  "manifests/app.pp": "c5b1f673bb8fc3dc91255ab9863dbc34",
+  "manifests/base.pp": "6479ca32e4849f6e8d7badf69448a8f7",
+  "manifests/db.pp": "444e9675b15fefe39c91628e3ffc4b05",
+  "manifests/lb.pp": "5b210f38de507690710239d9f82e1e6b",
+  "metadata.json": "2c7089f03d89722a02dd03182778ac0e",
+  "spec/classes/init_spec.rb": "28accebc0b1bb42eb9dfa4b0fd89cc13",
+  "spec/spec_helper.rb": "0db89c9a486df193c0e40095422e19dc",
+  "templates/mysql_users.sql": "854bd63190a0ad55d8a502b0270ea285",
+  "tests/init.pp": "55b24121f626741af94c5a207f1ccb4f"
+}
