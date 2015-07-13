@@ -67,8 +67,9 @@ module Stack
     end
 
     def stack_name
-      config.node.split('-').first
+       config.node.split(/([\S+-]+)-\S+-\d+/).last
     end
+
 
     def find_nodes(pattern)
       api.client.request('nodes', [ :~, 'name', pattern ]).data
